@@ -3,13 +3,14 @@
 
 model Playlist {
   id  Int @id @default(autoincrement())
+  name String @db.Text
   songs Song[]
 }
 
 model Song {
   id  Int @id @default(autoincrement())
   URL String  @db.Text
-  playlist  Playlist  @relation(fields: [playlistId], references: [id])
+  playlist  Playlist  @relation(fields: [playlistId], references: [id], onDelete: Cascade)
   playlistId Int 
 }
 
