@@ -10,6 +10,7 @@ model Playlist {
 model Song {
   id  Int @id @default(autoincrement())
   URL String  @db.Text
+  name String @db.Text
   playlist  Playlist  @relation(fields: [playlistId], references: [id], onDelete: Cascade)
   playlistId Int 
 }

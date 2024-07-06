@@ -1,4 +1,11 @@
-# Music Playlist Manager in Express using PostgreSQL
+# Music Playlist Manager in Express and React
+
+## Tech Stack:
+* Express (backend)
+* React (frontend)
+* PostgreSQL (database)
+* NextUI and Tailwind (css libraries)
+* Prisma (ORM)
 
 Includes an API to manage music playlists.
 

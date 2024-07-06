@@ -32,6 +32,7 @@ const createPlaylist = async (req, res) => {
             songs: {
                 create: songs.map((song) => ({
                     URL: song.URL,
+                    name: song.name
                 })),
             },
         },
@@ -56,7 +57,7 @@ const deletePlaylist = async (req, res) => {
 
 const addSong = async (req, res) => {
     const { id } = req.params
-    const { URL } = req.body
+    const { URL, name } = req.body
     // Check if the playlist exists
     const existingPlaylist = await db.playlist.findUnique({
         where: { id: Number(id) },
@@ -70,6 +71,7 @@ const addSong = async (req, res) => {
     const newSong = await db.song.create({
         data: {
             URL,
+            name,
             playlist: {
                 connect: { id: existingPlaylist.id },
             },
