@@ -32,7 +32,7 @@ export default function createPlaylist() {
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Add Song</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Create Playlist</ModalHeader>
                             <ModalBody>
                                 <Input
                                     label="Name"
