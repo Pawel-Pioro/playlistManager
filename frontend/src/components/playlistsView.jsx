@@ -1,22 +1,23 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { usePlaylistContext } from '../hooks/usePlaylistContext'
 
 import SongItem from './songItem'
 import AddSongModal from './addSongModal'
-import  CreatePlaylist from './createPlaylist'
+import CreatePlaylist from './createPlaylist'
 import { Accordion, AccordionItem, Button, useDisclosure } from '@nextui-org/react'
 
 export default function PlaylistsView() {
     const serverUrl = import.meta.env.VITE_SERVER_URL
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [playlists, setPlaylists] = useState([])
+    const {playlists, dispatch} = usePlaylistContext()
     const [currentPlaylist, setCurrentPlaylist] = useState(null)
 
     useEffect(() => {
         axios.get(serverUrl + 'playlists')
             .then((response) => {
-                setPlaylists(response.data.reverse())
+                dispatch({ type: 'SET_PLAYLISTS', payload: response.data.reverse() })
             })
             .catch((error) => console.log(error))
     }, [])
@@ -24,7 +25,9 @@ export default function PlaylistsView() {
     function deletePlaylist(playlistId) {
         axios.delete(serverUrl + 'playlists/' + playlistId)
             .then((response) => {
-                window.location.reload()
+                if (response.statusText === "OK") {
+                    dispatch({ type: 'DELETE_PLAYLIST', payload: playlistId })
+                }
             })
             .catch((error) => console.log(error))
     }

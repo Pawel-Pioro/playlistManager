@@ -1,9 +1,12 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input } from "@nextui-org/react";
 import { useState } from "react";
 import axios from 'axios'
+import { usePlaylistContext } from '../hooks/usePlaylistContext'
 
 export default function AddSongModal({ onClose, isOpen, playlistId }) {
     const serverUrl = import.meta.env.VITE_SERVER_URL
+
+    const {playlists, dispatch} = usePlaylistContext()
 
     const [inputs, setInputs] = useState({
         name: '',
@@ -13,7 +16,9 @@ export default function AddSongModal({ onClose, isOpen, playlistId }) {
     function addSong() {
         axios.post(serverUrl + 'playlists/' + playlistId + '/addSong', inputs)
             .then((response) => {
-                window.location.reload()
+                dispatch({ type: 'UPDATE_PLAYLIST', payload: response.data })
+                setInputs({ name: '', URL: '' })
+                onClose()
             })
             .catch((error) => console.log(error))
     }

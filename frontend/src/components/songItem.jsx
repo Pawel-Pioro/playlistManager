@@ -1,8 +1,11 @@
 import { Link, Button } from "@nextui-org/react";
 import axios from 'axios'
+import { usePlaylistContext } from '../hooks/usePlaylistContext'
 
 export default function PlaylistItem({ song, playlistId }) {
     const serverUrl = import.meta.env.VITE_SERVER_URL
+
+    const {playlists, dispatch} = usePlaylistContext()
 
     function deleteSong(songId){
         axios.delete(serverUrl + 'playlists/' + playlistId + '/removeSong', {
@@ -11,7 +14,7 @@ export default function PlaylistItem({ song, playlistId }) {
             }
         })
         .then((response) => {
-            window.location.reload()
+            dispatch({ type: 'UPDATE_PLAYLIST', payload: response.data})
         })
         .catch((error) => console.log(error))
     }

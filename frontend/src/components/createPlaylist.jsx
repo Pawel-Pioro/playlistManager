@@ -1,23 +1,29 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, useDisclosure } from "@nextui-org/react";
 import { useState } from "react"
 import axios from 'axios'
+import { usePlaylistContext } from '../hooks/usePlaylistContext'
 
 export default function createPlaylist() {
     const serverUrl = import.meta.env.VITE_SERVER_URL
     
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const {playlists, dispatch} = usePlaylistContext()
 
     const [inputs, setInputs] = useState({ 
         name: ''
     })
 
-    function createPlaylist() {
+    function createPlaylistHandler() {
         axios.post(serverUrl + 'playlists', {
             name: inputs.name,
             songs: []
         })
             .then((response) => {
-                window.location.reload()
+                if (response.statusText === "OK") {
+                    dispatch({ type: 'CREATE_PLAYLIST', payload: response.data })
+                    setInputs({ name: '' })
+                    onClose()
+                }
             })
             .catch((error) => console.log(error))
     }
@@ -46,7 +52,7 @@ export default function createPlaylist() {
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Close
                                 </Button>
-                                <Button color="primary" onPress={createPlaylist}>
+                                <Button color="primary" onPress={createPlaylistHandler}>
                                     Create
                                 </Button>
                             </ModalFooter>

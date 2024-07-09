@@ -78,7 +78,18 @@ const addSong = async (req, res) => {
         },
     });
 
-    res.status(200).json(newSong);
+    // get the updated playlist
+    const updatedPlaylist = await db.playlist
+        .findUnique({
+            where: {
+                id: Number(id),
+            },
+            include: {
+                songs: true
+            },
+        })
+
+    res.status(200).json(updatedPlaylist);
 }
 
 const removeSong = async (req, res) => {
@@ -101,7 +112,19 @@ const removeSong = async (req, res) => {
         },
     });
 
-    res.status(200).json(deletedSong);
+    // get the updated playlist
+    const updatedPlaylist = await db.playlist
+        .findUnique({
+            where: {
+                id: Number(id),
+            },
+            include: {
+                songs: true
+            },
+        })
+
+
+    res.status(200).json(updatedPlaylist);
 }
 
 module.exports = {
