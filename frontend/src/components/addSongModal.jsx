@@ -12,8 +12,10 @@ export default function AddSongModal({ onClose, isOpen, playlistId }) {
         name: '',
         URL: ''
     })
+    const [loading, setLoading] = useState(false)
 
     function addSong() {
+        setLoading(true)
         axios.post(serverUrl + 'playlists/' + playlistId + '/addSong', inputs)
             .then((response) => {
                 dispatch({ type: 'UPDATE_PLAYLIST', payload: response.data })
@@ -21,6 +23,7 @@ export default function AddSongModal({ onClose, isOpen, playlistId }) {
                 onClose()
             })
             .catch((error) => console.log(error))
+            .finally(() => setLoading(false))
     }
 
     return (
@@ -53,7 +56,7 @@ export default function AddSongModal({ onClose, isOpen, playlistId }) {
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Close
                                 </Button>
-                                <Button color="primary" onPress={addSong}>
+                                <Button isLoading={loading} color="primary" onPress={addSong}>
                                     Save
                                 </Button>
                             </ModalFooter>

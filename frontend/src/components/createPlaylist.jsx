@@ -8,12 +8,14 @@ export default function createPlaylist() {
     
     const { isOpen, onOpen, onClose } = useDisclosure()
     const {playlists, dispatch} = usePlaylistContext()
+    const [loading, setLoading] = useState(false)
 
     const [inputs, setInputs] = useState({ 
         name: ''
     })
 
     function createPlaylistHandler() {
+        setLoading(true)
         axios.post(serverUrl + 'playlists', {
             name: inputs.name,
             songs: []
@@ -26,6 +28,7 @@ export default function createPlaylist() {
                 }
             })
             .catch((error) => console.log(error))
+            .finally(() => setLoading(false))
     }
 
     return (
@@ -52,7 +55,7 @@ export default function createPlaylist() {
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Close
                                 </Button>
-                                <Button color="primary" onPress={createPlaylistHandler}>
+                                <Button isLoading={loading} color="primary" onPress={createPlaylistHandler}>
                                     Create
                                 </Button>
                             </ModalFooter>
